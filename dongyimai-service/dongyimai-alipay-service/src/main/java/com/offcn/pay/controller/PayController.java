@@ -6,6 +6,7 @@ import com.offcn.order.feign.OrderFeign;
 import com.offcn.order.pojo.PayLog;
 import com.offcn.pay.service.AliPayService;
 import com.offcn.utils.IdWorker;
+import org.apache.tomcat.jni.Thread;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -113,5 +114,6 @@ public class PayController {
         Map<String, String> resultMap = aliPayService.createNative(parameters);
 
         return new Result<Map>(true, StatusCode.OK, "二维码连接地址创建成功啦！！！", resultMap);
+        System.out.println("resultMap = " + resultMap);
     }
 }

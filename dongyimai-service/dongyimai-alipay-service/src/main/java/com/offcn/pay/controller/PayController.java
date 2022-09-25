@@ -112,6 +112,6 @@ public class PayController {
 
         Map<String, String> resultMap = aliPayService.createNative(parameters);
 
-        return new Result<Map>(true, StatusCode.OK, "二维码连接地址创建成功", resultMap);
+        return new Result<Map>(true, StatusCode.OK, "二维码连接地址创建成功啦！！！", resultMap);
     }
 }

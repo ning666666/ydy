@@ -1,0 +1,52 @@
+server:
+  port: 9001
+spring:
+  application:
+    name: dym-sellergoods
+  redis:
+    host: 192.168.52.131
+    port: 6379
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/dongyimaidb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    username: root
+    password: 123
+    type: com.alibaba.druid.pool.DruidDataSource
+    minIdle: 5      # 最小连接池数量
+    maxActive: 20   # 最大连接池数量
+    maxWait: 60000  # 获取连接时最大等待时间
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    lease-renewal-interval-in-seconds: 5 # 每隔5秒发送一次心跳
+    lease-expiration-duration-in-seconds: 10 # 10秒不发送就过期
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+    instance-id: ${spring.application.name}:${server.port}
+feign:
+  #hystrix 配置
+  hystrix:
+    command:
+      default:
+        execution:
+          isolation:
+            thread:
+              timeoutInMilliseconds: 10000
+            strategy: SEMAPHORE
+            #使用Seamphore，你创建了多少线程，实际就会有多少线程进行执行，只是可同时执行的线程数量会受到限制
+            #要调用其他微服务，会将头文件中的令牌数据解密
+mybatis-plus:
+  #mapper-locations: classpath:/mybatis/mappers/*.xml  # 配置映射文件类路径
+  #因为这里可以省略接口的映射文件，所以可以不配置
+  configuration:
+    map-underscore-to-camel-case: true  #开启驼峰式编写规范
+    #全局懒加载
+    #二级缓存:存在mapper接口实现类对象中，一级缓存是存在sqlSession数据库连接对象中
+  type-aliases-package: com.offcn.sellergoods.pojo #给传入传出类型中会用到的给pojo实体类起别名
+# 配置sql打印日志
+logging:
+  level:
+    com:
+      offcn: debug

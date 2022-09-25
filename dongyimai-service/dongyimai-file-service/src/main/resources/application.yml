@@ -1,0 +1,22 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB #上传文件限定的单个大小
+      max-request-size: 10MB #上传文件总限定的大小，可以一次上传多个
+  application:
+    name: file
+server:
+  port: 9002
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+  instance:
+    prefer-ip-address: true
+feign:
+  hystrix:
+    enabled: true
+# FILE_SERVER_URL: http://192.168.188.128:8080/
+#前端浏览上传的文件需要加上checker老大的ip地址和端口号才能浏览，
+#可以在这里加，方便维护，也可以在负责文件上传代码中指定，虽然配置文件中有，但不是我们需要的格式
+FILE_SERVER_URL: http://192.168.52.131/

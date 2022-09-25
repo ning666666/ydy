@@ -1,0 +1,62 @@
+server:
+  port: 9009
+spring:
+  application:
+    name: pay
+  redis:
+    host: 192.168.52.131
+    port: 6379
+  main:
+    allow-bean-definition-overriding: true #允许重复注入
+  rabbitmq:
+    host: 192.168.52.131
+    port: 5672
+    username: guest
+    password: guest
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+  instance:
+    prefer-ip-address: true
+feign:
+  hystrix:
+    enabled: true
+# 配置sql打印日志
+logging:
+  level:
+    com:
+      offcn: debug
+#hystrix 配置
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          #如果enabled设置为false，则请求超时交给ribbon控制
+          enabled: true
+        isolation:
+          strategy: SEMAPHORE #需要feign的远程服务调用，设置该隔离策略
+
+#支付宝支付信息配置
+alipay:
+  serverUrl: https://openapi.alipaydev.com/gateway.do
+  #notify-url: http://7r8ukqlrpt.52http.com/pay/notify/url
+  appId: 2021000120619426
+  privateKey: MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCHmVZCfQnDb3WkGp+A6CbS8C/N6QGv/NjfZmxKQAaZT5xD07woBEL5O4q8CDGDE0z7sDK97tjjojRgyVUbJTj04/cBtXU6LW3EQpKbxjfTkok+esiIn+BYCXL1hZLFiisRnqbN3+OoeS8z/a4Xv+9j0td25AQIF6wM9NpmK+b+FVH/BiX2LLDDddcOEZtq8nh/Wk7AwOCvxBGrEsxncU0pmJvB9XRHK6FuZ9owdCiOTxe/SrIVDEH9H5409r7PPOpQdBA9DnSUa7L1es9oKa0fU3SHDwEVjMfISyoU0fx7J3nKWWEP6CsFhkfbyx+UJyDN8zPxnRkv6v7socR4BSKBAgMBAAECggEAAJ7nEi7YWJiuBS5KBKELbHPFBEBIzbFunLcvT7ezUAhZQsY5WkWKuPFY1TuEXoE8HPrVgKETRRd8/eRuC03EUPqqKsvV2YpTsk5LtYLWxpUpI6wUNuvkbwK8D/uojFbxk4cSZGbd9+t2F9rVbS5nviE880Jf8lmJZBXK2iThTdBxdPVL2IjF3VpqfTFMINB725AB/gF0fnIw6f0Riks6Kben7PZ9aurEU5nWETn0UI32XfZn3LgKo4DMHTOE6CFU8pDAxcjdJEAPfoaV0saYqe+Yq6IHyFW5XJq4o/KxYJHlAImZAkSqOxYKuEjIZaotZ0uPyM8P+7RL8V1A7m1zsQKBgQDNFA/oqAUSQNFVQWIWt7CAoVExxFFMw2H/RltxBuSXysBGW4utW/njIegkV8FFhgkqRmjBL6hsmdqcth3StDyE71MlbwOS46u0PLzyWeUNKX1PJGhFeef1FVXLn+25M2XBnrEVEU01L3+x2EPOMQCimsibwe/WDN9WBeatrsWLBwKBgQCpRMXERszTTzQAbUtnl23EoLXd0/KQmCwBLGlAnVW0kH4vU0kGkkpIOZYuHPJs1osdUq0vFUI/lvNpmneM1NMaX61twmf1OEHrcrNTXGqmVTAU+fJTMIt7YPe4Vr2V1FMmvDZWWVZEjhzwMFOJU0zVsKLYuTG01EzQcagQO0ScNwKBgCKBdKfN1YSbuV0h8jImWCFcgz/fa1qCKXP9T5d19HKB39Y2wwq5RhNsehXbWh6rjdE6JZgTv7/+JyVlEyGHyAMKDbBnvG8ztYlPCu+wJnUPfREa7Bx8hYXcQCJR13ro5f8tB1inH5mKU28GF2qTHis95fEnMYaPheiAd67TkFNzAoGAKJ32DskmcTY6NjgDthHiJyKhQV+Qfx3kwUtU3kpivHdHsDd9+HO2G2qmHN6ZVYCN1TV3lSq2wOeJ9Tc5pLOVDGkVBpd1tqQPPV5Cpagxd0RNy1rGySuG7M4x4yv9Riyy30Kej03Uo5KuYvxVr0gr0cMW8IZP5SJkZEhBmdN+/TUCgYBovEWmE/1eiQhWBVhUfBOBi3zlOWC5AMd/KD1d54CWtRIBmoGrN/oQAkdAkJwI0ukJLHvp1BDT3lIUO6qYl9UnSILCfAuyp5OgsOJTnd0Uz8e5nilfUAmbrWja3YnYSB/feMZYqijoApnU1yTDSg5IZ/+O5Vn5D+nqwSBv+QyTkg==
+  format: json
+  charset: utf-8
+  alipayPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiPjxl2GVFGx2B/lX2VZB+okfScSewHrFKb6M3ZDbtEq+lAldW4wXrCPKImxj0Q0mjmiO8Yi0oei3NbpPz5kBt4v2qFiT2H2xjd4wI52oe6T5Je04Gda/t0euETdwzfpeloztEqc392TbpexZJ6la7m8cYmnWPghbtLpJrHacaLXPmgEQFonwf05fIQDWUEnvpccLCuwOaAHx0AxPj+yr66iT/SGVFt/nVr0eAwaABljLTMrpXGu8oc/H0EAHJGshNO1XkLywpLy5qu6XqgPPRy5AulifzYV+qswiCC7l82rxrgwGjXCdb011bSFg3LD7lzxyE8YHNdSenYqIjX2buQIDAQAB
+  signType: RSA2 #加密方式
+#位置支付交换机和队列
+mq:
+  pay:
+    exchange:
+      order: exchange.order
+      seckillorder: exchange.seckillorder
+    queue:
+      order: queue.order
+      seckillorder: queue.seckillorder
+    routing:
+      key: queue.order
+      seckillkey: queue.seckillorder

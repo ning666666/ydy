@@ -1,0 +1,31 @@
+server:
+  port: 9101
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+  instance:
+    prefer-ip-address: true
+feign:
+  hystrix:
+    enabled: true
+
+  client:
+    config:
+      #这里填具体的服务名称（也可以填default，表示对所有服务生效）
+      app-order:
+        #connectTimeout和readTimeout这两个得一起配置才会生效
+        connectTimeout: 300000
+        readTimeout: 300000
+spring:
+  thymeleaf:
+    cache: false
+#默认加缓存，浏览器的优化机制，在访问页面时，遇到相同的网址会把网站数据默认进行缓存，下次再访问可能就会拿缓存好的数据，我们开发（添数据）的时候不加，项目上线加
+  application:
+    name: search-web
+  main:
+    allow-bean-definition-overriding: true
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,
+                      classpath:/public/,classpath:/templates/
+    #静态资源的重新定义

@@ -1,0 +1,44 @@
+server:
+  port: 9005
+spring:
+  application:
+    name: seckill
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/dongyimaidb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: 123
+  redis:
+    host: 192.168.52.131
+    port: 6379
+  rabbitmq:
+    host: 192.168.52.131 #mq的服务器地址
+    port: 5672
+    username: guest #账号
+    password: guest #密码
+  main:
+    allow-bean-definition-overriding: true
+  jackson:
+    time-zone: GMT+8
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+  instance:
+    prefer-ip-address: true
+feign:
+  hystrix:
+    enabled: true
+#hystrix 配置
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          #如果enabled设置为false，则请求超时交给ribbon控制
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+          strategy: SEMAPHORE #微服务之间的feign远程服务调用，启动该熔断策略

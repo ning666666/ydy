@@ -1,0 +1,17 @@
+server:
+  port: 8761
+spring:
+  application:
+    name: eureka
+eureka:
+  instance:
+    hostname: 127.0.0.1
+  client:
+    #高可用设计中，eureka既是服务器供别人注册，又是客户端
+    register-with-eureka: false   #让自己作为客户端不再去别的地方注册
+    fetch-registry: false         #让自己作为服务器不然别人来注册
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka #指定注册中心地址，方便客户端访问
+  server:
+    enable-self-preservation: false  #关闭自我保护
+    eviction-interval-timer-in-ms: 5000  #每隔5秒进行一次服务列表清理，心跳监测间隔时间

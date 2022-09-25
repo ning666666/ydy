@@ -1,0 +1,67 @@
+spring:
+  application:
+    name: gateway-web
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]': #匹配所有请求
+            allowedOrigins: "*" #跨域处理允许所有的域
+            allowedMethods: #支持的方法
+              - GET
+              - POST
+              - PUT
+              - DELETE
+      routes:
+        - id: dongyimai_goods_route
+         #uri: http://localhost:9001 #123不能写死ip地址，sellergoods是有服务器集群的
+          uri: lb://DYM-SELLERGOODS #lb负载均衡的规则，服务器集群，LoadBalancerClient 路由过滤器
+         # predicates:
+         #  - Path=/brand** 1加入网关，没加下面的filters，访问http://localhost:8001/brand，也能访问到http://localhost:9001/brand
+         # predicates:
+         #  - Path=/**  2
+          predicates:
+         #  - Path=/api/brand** #3
+            - Path=/api/album/**,/api/brand/**,/api/cache/**,/api/categoryBrand/**,/api/category/**,/api/para/**,/api/pref/**,/api/sku/**,/api/spec/**,/api/spu/**,/api/stockBack/**,/api/template/**
+         #  - Host=cloud.ujiuye.com** #4 还需要在windows电脑中做配置，声明IP地址
+          filters:
+         #  - PrefixPath=/brand # 2过滤器，预先在路径上加个brand，访问http://localhost:8001/，就能访问到http://localhost:9001/brand
+            - StripPrefix=1 #3跳过第一个api路径，使用场景：在移动端、微信小程序、安卓、ios中，点击分页是叠加的，还能翻回第一页，而电脑pc端，是替换的过程
+            - name: RequestRateLimiter   #请求数限流 名字不能随便写 ，使用默认的facatory
+              args:
+                  key-resolver: "#{@ipKeyResolver}"   #用于通过SPEL表达式来指定使用哪一个KeyResolver.
+                  redis-rate-limiter.replenishRate: 1 #是您希望允许用户每秒执行多少请求，而不会丢弃任何请求。这是令牌桶填充的速率. (即游客申请入园速率)
+                  redis-rate-limiter.burstCapacity: 1 #是指令牌桶的容量，允许在一秒钟内完成的最大请求数,将此值设置为零将阻止所有请求。(即后勤给售票处补票速率)
+        #用户微服务
+        - id: dongyimai_user_route
+          uri: lb://user #大小写随意
+          predicates:
+            - Path=/api/user/**,/api/address/**,/api/areas/**,/api/cities/**,/api/provinces/** #user模块多路径匹配
+          filters:
+            - StripPrefix=1
+       #订单微服务
+        - id: dongyimai_order_route
+          uri: lb://order
+          predicates:
+            - Path=/api/cart/**,/api/categoryReport/**,/api/orderConfig/**,/api/order/**,/api/orderItem/**,/api/orderLog/**,/api/preferential/**,/api/returnCause/**,/api/returnOrder/**,/api/returnOrderItem/**
+          filters:
+            - StripPrefix=1
+
+  redis:
+    host: 192.168.52.131
+    port: 6379
+server:
+  port: 8001
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  web:
+    exposure:
+      include: true
